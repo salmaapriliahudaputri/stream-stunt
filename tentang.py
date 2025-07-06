@@ -477,8 +477,11 @@ def app():
             # Contoh: {'Usia Anak (Bulan)': 0.35, 'Berat Badan (kg)': 0.25, ...}
 
             # Use os.path.exists to check if the file exists
-            if os.path.exists('feature_importance1.sav'):
-                with open('feature_importance1.sav', 'rb') as f:
+            models_folder = "model"
+            feature_importance_file = "feature_importance1.sav"
+            full_path = os.path.join(model_folder, feature_importance_file)
+            if os.path.exists('full_path'):
+                with open(full_path, 'rb') as f:
                     feature_importances_data = pickle.load(f)
 
                 # Convert to DataFrame for plotting
