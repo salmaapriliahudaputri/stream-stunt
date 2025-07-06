@@ -1,6 +1,6 @@
 import streamlit as st
 from streamlit_option_menu import option_menu
-import pyrebase4
+import pyrebase
 from datetime import datetime
 import os
 import base64
@@ -26,7 +26,7 @@ firebaseConfig = {
 }
 
 #Firease authenti
-firebase=pyrebase4.initialize_app(firebaseConfig)
+firebase=pyrebase.initialize_app(firebaseConfig)
 auth = firebase.auth()
 
 #database
