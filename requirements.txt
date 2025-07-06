@@ -6,3 +6,4 @@ scikit-learn
 pyrebase
 streamlit
 streamlit-option-menu
+requests
