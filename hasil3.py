@@ -18,7 +18,7 @@ def load_all_resources():
     try:
         # Asumsi file berada di direktori yang sama
         scaler = joblib.load('scaler_stunting1.sav')
-        model = joblib.load('stuting_preduksi1.sav')
+        model = joblib.load('stuting_preduksi.sav')
         raw_df = pd.read_excel('stunting_dataset1.xlsx')
         
         return scaler, model, raw_df, True
@@ -37,7 +37,7 @@ DISPLAY_COLUMN_ORDER = [
     'child_name', # Kolom baru: Nama Anak
     'chAge', 'chSex', 'chSize', 'chBw', 'db', 'breaststart', 'chDiar', 'chDrug',
     'MmAge', 'MmEdu', 'MomWork', 'Mmstat', 'MmHeight', 'BMI',
-    'nChild', 'residence', 'wi', 'water', 'toilet', 'altitudes', 'reading', 'tv', 'radio',
+    'region','nChild', 'residence', 'wi', 'water', 'toilet', 'altitudes', 'reading', 'tv', 'radio',
     'Status Prediksi', 'Probabilitas Normal (%)', 'Probabilitas Stunting (%)', 'Saran dan Solusi'
 ]
 
@@ -84,7 +84,9 @@ def get_stunting_advice(input_data_row, prediction_status):
             advice.append(f"- **Tinggi Badan Ibu ({MmHeight_val} cm):** Tinggi badan ibu yang pendek (<150cm) bisa menjadi indikator riwayat gizi buruk pada ibu, yang dapat mempengaruhi pertumbuhan anak. Perlu perhatian khusus pada gizi ibu selama kehamilan dan menyusui.")
         if input_data_row.get('BMI') in ['uderweight', 'Overeight', 'obses']:
             advice.append(f"- **Body Mass Index Ibu ({input_data_row.get('BMI')}):** Berat badan ibu yang kurang atau berlebih (underweight/overweight/obese) sebelum atau selama kehamilan dapat memengaruhi kesehatan dan pertumbuhan anak. Edukasi gizi dan gaya hidup sehat untuk ibu.")
-
+            
+        if input_data_row.get('region') in ['est']:
+            advice.append(f"- **Provinsi ({input_data_row.get('region')}):**pastikan infrastruktur mewadai."
         if input_data_row.get('nChild') in ['2 child', 'more than 3']:
             advice.append(f"- **Jumlah Anak dalam Keluarga ({input_data_row.get('nChild')}):** Jumlah anak yang banyak dapat membagi sumber daya. Pastikan setiap anak mendapat porsi gizi dan perhatian yang cukup.")
         if input_data_row.get('residence') == 'rural':
@@ -366,6 +368,7 @@ def app(db, user_info): # Accept db and user_info
                 BMI = st.selectbox('Body Mass Index Ibu',('','normal','obses','uderweight','Overeight'), key='BMI_input')
 
                 st.title("Data Rumah Tinggal")
+                region = st.selectbox('Provinsi',('','est','kigali','north','south','west'), key='region_input')
                 nChild = st.selectbox('Jumlah Anak dalam Keluarga',('','1 child','2 child','more than 3'), key='nChild_input')
                 residence = st.selectbox('Domisili *(urban: kota, rural: desa)*', ('','urban', 'rural'), key='residence_input')
                 wi = st.selectbox('Index Kekayaan', ('','poor', 'middle', 'rich'), key='wi_input')
@@ -383,7 +386,7 @@ def app(db, user_info): # Accept db and user_info
                         'child_name': child_name,
                         'MmHeight': MmHeight, 'chAge': chAge, 'wi': wi, 'tv': tv, 'radio': radio,
                         'MmEdu': MmEdu, 'chSize': chSize, 'chDrug': chDrug, 'chBw': chBw,
-                        'toilet': toilet, 'breaststart': breaststart,
+                        'region': region,'toilet': toilet, 'breaststart': breaststart,
                         'MmAge': MmAge, 'residence': residence, 'db': db_status, 'altitudes': altitudes, 
                         'BMI': BMI, 'reading': reading, 'chSex': chSex, 'nChild': nChild,
                         'Mmstat': Mmstat, 'MomWork': MomWork, 'water': water, 'chDiar': chDiar
@@ -483,7 +486,8 @@ def app(db, user_info): # Accept db and user_info
                                 'MmEdu_no', 'MmEdu_primary', 'MmEdu_second or higher',
                                 'chSize_average', 'chSize_large', 'chSize_small',
                                 'chDrug_no', 'chDrug_yes',
-                                'chBw_less then 2.5', 'chBw_more than 2.5',
+                                'chBw_less then 2.5', 'chBw_more than 2.5,
+                                'region_est','region_kigali','region_north','region_south','region_west',
                                 'toilet_improved', 'toilet_unimproved',
                                 'breaststart_1-24hr', 'breaststart_1hr', 'breaststart_30day',
                                 'residence_rural', 'residence_urban',
