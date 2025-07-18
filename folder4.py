@@ -6,7 +6,7 @@ import os
 import base64
 
 # Import your app modules
-import tentang, akun, beranda, hasil3
+import tentang, akun, beranda, hasil3, hasil6
 
 st.set_page_config(
     page_title="Peduli Stunting",
@@ -329,7 +329,7 @@ def dashboard_app():
         beranda.app()
     elif app_selected == 'Prediksi':
         # Pass db object and user_info to hasil3.app()
-        hasil3.app(db, st.session_state.user_info) # <--- IMPORTANT CHANGE HERE
+        hasil6.app(db, st.session_state.user_info) # <--- IMPORTANT CHANGE HERE
     elif app_selected == 'Tentang':
         tentang.app()
     elif app_selected == 'Akun':
