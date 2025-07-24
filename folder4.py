@@ -6,7 +6,7 @@ import os
 import base64
 
 # Import your app modules
-import tentang, akun, beranda, hasil6
+import tentang1, akun, beranda, hasil7
 
 st.set_page_config(
     page_title="Peduli Stunting",
