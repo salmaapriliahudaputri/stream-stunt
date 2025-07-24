@@ -329,9 +329,9 @@ def dashboard_app():
         beranda.app()
     elif app_selected == 'Prediksi':
         # Pass db object and user_info to hasil6.app()
-        hasil6.app(db, st.session_state.user_info) # <--- IMPORTANT CHANGE HERE
+        hasil7.app(db, st.session_state.user_info) # <--- IMPORTANT CHANGE HERE
     elif app_selected == 'Tentang':
-        tentang.app()
+        tentang1.app()
     elif app_selected == 'Akun':
         akun.app()
 
