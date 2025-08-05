@@ -51,7 +51,7 @@ def get_stunting_advice(input_data_row, prediction_status):
     child_name = input_data_row.get('child_name', 'Balita Ini') 
     
     if prediction_status == 'Stunting':
-        advice.append(f"{child_name} diprediksi mengalami **stunting**. Intervensi segera sangat disarankan. Berikut adalah beberapa faktor yang mungkin berkontribusi dan saran terkait:"
+        advice.append(f"{child_name} diprediksi mengalami **stunting**.")
     else: # Prediction is Normal
         advice.append(f"{child_name} diprediksi **tidak stunting**. Terus pertahankan pola asuh dan gizi yang baik.")
     return "\n".join(advice)
@@ -678,3 +678,4 @@ def app(db, user_info): # Parameter db dan user_info masih ada tapi tidak diguna
                     # except Exception as clear_all_e:
 
                     #     st.error(f"Gagal menghapus semua riwayat: {clear_all_e}")
+
