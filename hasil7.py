@@ -51,73 +51,9 @@ def get_stunting_advice(input_data_row, prediction_status):
     child_name = input_data_row.get('child_name', 'Balita Ini') 
     
     if prediction_status == 'Stunting':
-        advice.append(f"{child_name} diprediksi mengalami **stunting**. Intervensi segera sangat disarankan. Berikut adalah beberapa faktor yang mungkin berkontribusi dan saran terkait:")
-
-        chAge_val = pd.to_numeric(input_data_row.get('chAge', ''), errors='coerce')
-        if not pd.isna(chAge_val) and chAge_val < 24:
-            advice.append(f"- **Usia Anak ({int(chAge_val)} bulan):** Pastikan asupan gizi yang adekuat, terutama di 1000 Hari Pertama Kehidupan (HPK). Fokus pada ASI eksklusif hingga 6 bulan dan MPASI yang bergizi dan bervariasi setelahnya.")
-        if input_data_row.get('chSex') == 'f':
-            advice.append(f"- **Jenis Kelamin Anak ({input_data_row.get('chSex')}):** Meskipun jenis kelamin tidak langsung menyebabkan stunting, pada beberapa kasus, anak perempuan mungkin kurang mendapat perhatian gizi dibandingkan anak laki-laki. Pastikan semua anak mendapat perhatian gizi yang sama.")
-        if input_data_row.get('chSize') in ['small', 'average']:
-            advice.append(f"- **Ukuran Anak Saat Lahir ({input_data_row.get('chSize')}):** Berat lahir rendah (small/average) meningkatkan risiko stunting. Perlu pemantauan pertumbuhan yang lebih ketat.")
-        if input_data_row.get('chBw') == 'less then 2.5':
-            advice.append(f"- **Berat Anak Saat Lahir ({input_data_row.get('chBw')} kg):** Berat lahir rendah (<2.5 kg) adalah faktor risiko tinggi. Pastikan nutrisi pasca-kelahiran optimal dan pantau pertumbuhan secara rutin.")
-        if input_data_row.get('db') != 'still breastfeeding':
-            advice.append(f"- **Status Menyusui Anak ({input_data_row.get('db')}):** ASI eksklusif sangat penting. Jika tidak menyusui, pastikan alternatif nutrisi yang memadai dan higienis.")
-        if input_data_row.get('breaststart') != '1hr':
-            advice.append(f"- **Waktu Anak Mendapat ASI Pertama Kali ({input_data_row.get('breaststart')}):** Inisiasi Menyusu Dini (IMD) penting. Jika IMD tertunda, pastikan dukungan laktasi yang kuat.")
-        if input_data_row.get('chDiar') == 'yes':
-            advice.append(f"- **Anak Mengalami Diare ({input_data_row.get('chDiar')}):** Diare berulang dapat menghambat penyerapan nutrisi. Tingkatkan kebersihan, akses air bersih, dan segera obati diare.")
-        if input_data_row.get('chDrug') == 'no':
-            advice.append(f"- **Anak Mengonsumsi Obat Parasit ({input_data_row.get('chDrug')}):** Jika anak tidak minum obat parasit, pertimbangkan untuk berkonsultasi dengan tenaga medis tentang pemberian obat cacing teratur di daerah endemis.")
-
-        MmAge_val = pd.to_numeric(input_data_row.get('MmAge', ''), errors='coerce')
-        if not pd.isna(MmAge_val) and (MmAge_val < 20 or MmAge_val > 35):
-            advice.append(f"- **Usia Ibu ({int(MmAge_val)} tahun):** Kehamilan di usia terlalu muda atau terlalu tua dapat mempengaruhi kesehatan janin dan kemampuan ibu merawat anak. Pastikan ibu mendapat dukungan kesehatan yang komprehensif.")
-        if input_data_row.get('MmEdu') in ['no', 'primary']:
-            advice.append(f"- **Pendidikan Terakhir Ibu ({input_data_row.get('MmEdu')}):** Tingkat pendidikan ibu yang lebih rendah seringkali berkorelasi dengan kurangnya pengetahuan gizi. Berikan edukasi gizi dan kesehatan secara berkelanjutan.")
-        if input_data_row.get('MomWork') == 'yes':
-            advice.append(f"- **Status Ibu Bekerja ({input_data_row.get('MomWork')}):** Ibu bekerja mungkin memiliki waktu terbatas. Pastikan ketersediaan pengasuhan yang berkualitas dan makanan bergizi yang mudah diakses.")
-        if input_data_row.get('Mmstat') in ['single', 'separated']:
-            advice.append(f"- **Status Pernikahan Ibu ({input_data_row.get('Mmstat')}):** Ibu tunggal atau berpisah mungkin menghadapi tantangan ekonomi dan dukungan sosial. Berikan dukungan sosial dan akses ke program bantuan.")
-        MmHeight_val = pd.to_numeric(input_data_row.get('MmHeight', ''), errors='coerce')
-        if not pd.isna(MmHeight_val) and MmHeight_val < 150:
-            advice.append(f"- **Tinggi Badan Ibu ({MmHeight_val} cm):** Tinggi badan ibu yang pendek (<150cm) bisa menjadi indikator riwayat gizi buruk pada ibu, yang dapat mempengaruhi pertumbuhan anak. Perlu perhatian khusus pada gizi ibu selama kehamilan dan menyusui.")
-        if input_data_row.get('BMI') in ['uderweight', 'Overeight', 'obses']:
-            advice.append(f"- **Body Mass Index Ibu ({input_data_row.get('BMI')}):** Berat badan ibu yang kurang atau berlebih (underweight/overweight/obese) sebelum atau selama kehamilan dapat memengaruhi kesehatan dan pertumbuhan anak. Edukasi gizi dan gaya hidup sehat untuk ibu.")
-        # Perbaikan: 'more than 3' seharusnya bukan kategori region, ini perlu dikoreksi berdasarkan data aktual Anda
-        # Jika 'more than 3' adalah kategori yang salah di sini, pertimbangkan untuk menghapusnya atau mengoreksinya.
-        # Asumsi 'est' adalah kategori region yang valid untuk saran ini.
-        if input_data_row.get('region') in ['est']:
-            advice.append(f"- **Provinsi ({input_data_row.get('region')}):** Cek Fasilitas infrastruktur publik terdekat.")
-
-        if input_data_row.get('nChild') in ['2 child', 'more than 3']:
-            advice.append(f"- **Jumlah Anak dalam Keluarga ({input_data_row.get('nChild')}):** Jumlah anak yang banyak dapat membagi sumber daya. Pastikan setiap anak mendapat porsi gizi dan perhatian yang cukup.")
-        if input_data_row.get('residence') == 'rural':
-            advice.append(f"- **Domisili ({input_data_row.get('residence')}):** Area pedesaan seringkali memiliki akses terbatas terhadap fasilitas kesehatan dan pangan bergizi. Perkuat program gizi di tingkat komunitas.")
-        if input_data_row.get('wi') == 'poor':
-            advice.append(f"- **Index Kekayaan ({input_data_row.get('wi')}):** Status ekonomi 'poor' adalah faktor risiko utama. Dukungan program pangan, bantuan tunai, dan edukasi tentang pemanfaatan sumber daya.")
-        if input_data_row.get('water') == 'unimproved':
-            advice.append(f"- **Kondisi Saluran Air di Rumah ({input_data_row.get('water')}):** Akses ke air bersih yang tidak 'improved' meningkatkan risiko penyakit. Tingkatkan akses ke sumber air bersih dan edukasi kebersihan.")
-        if input_data_row.get('toilet') == 'unimproved':
-            advice.append(f"- **Kondisi Toilet dalam Rumah ({input_data_row.get('toilet')}):** Sanitasi yang buruk meningkatkan risiko infeksi. Promosikan penggunaan toilet 'improved' dan kebiasaan cuci tangan.")
-        if input_data_row.get('altitudes') == ">2000":
-            advice.append(f"- **Ketinggian Tempat Tinggal ({input_data_row.get('altitudes')}):** Ketinggian di atas 2000 mdpl dapat mempengaruhi ketersediaan pangan dan kesehatan pernapasan. Perlu strategi gizi yang disesuaikan dengan kondisi lokal.")
-        if input_data_row.get('reading') == 'no' or input_data_row.get('tv') == 'no' or input_data_row.get('radio') == 'no':
-            advice.append(f"- **Akses Informasi (Koran: {input_data_row.get('reading')}, TV: {input_data_row.get('tv')}, Radio: {input_data_row.get('radio')}):** Keterbatasan akses informasi dapat membatasi pengetahuan tentang gizi dan kesehatan. Manfaatkan berbagai media untuk edukasi kesehatan.")
+        advice.append(f"{child_name} diprediksi mengalami **stunting**. Intervensi segera sangat disarankan. Berikut adalah beberapa faktor yang mungkin berkontribusi dan saran terkait:"
     else: # Prediction is Normal
         advice.append(f"{child_name} diprediksi **tidak stunting**. Terus pertahankan pola asuh dan gizi yang baik.")
-        
-        advice.append("- **Nutrisi Optimal:** Pastikan asupan gizi seimbang sesuai usia, termasuk protein hewani, sayur, dan buah-buahan.")
-        advice.append("- **Pemantauan Pertumbuhan:** Lakukan penimbangan dan pengukuran tinggi/panjang badan secara rutin di Posyandu atau fasilitas kesehatan.")
-        advice.append("- **Higienitas:** Jaga kebersihan lingkungan, makanan, dan pribadi untuk mencegah infeksi.")
-        advice.append("- **Stimulasi Dini:** Berikan stimulasi yang cukup untuk perkembangan kognitif dan motorik anak.")
-        
-        if input_data_row.get('chDiar') == 'yes':
-            advice.append(f"- **Anak Mengalami Diare ({input_data_row.get('chDiar')}):** Meskipun tidak stunting saat ini, diare berulang dapat meningkatkan risiko di kemudian hari. Tetap perhatikan kebersihan dan penanganan diare yang cepat.")
-        if input_data_row.get('chBw') == 'less then 2.5':
-            advice.append(f"- **Berat Anak Saat Lahir ({input_data_row.get('chBw')} kg):** Anak dengan berat lahir rendah (<2.5 kg) tetap perlu perhatian khusus dan pemantauan pertumbuhan yang ketat meskipun saat ini tidak stunting.")
-    
     return "\n".join(advice)
 
 # --- Fungsi untuk mendapatkan riwayat prediksi (TIDAK LAGI DARI FIREBASE) ---
@@ -740,4 +676,5 @@ def app(db, user_info): # Parameter db dan user_info masih ada tapi tidak diguna
                     #     else:
                     #         st.warning("Objek database tidak tersedia. Tidak bisa menghapus semua riwayat.")
                     # except Exception as clear_all_e:
+
                     #     st.error(f"Gagal menghapus semua riwayat: {clear_all_e}")
